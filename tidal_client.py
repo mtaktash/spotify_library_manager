@@ -22,7 +22,7 @@ class TidalClient:
         return normalized
 
     def search_track(self, track) -> str | None:
-        query = self.__normalize(f"{track['name']} {' '.join(track['artists'])}")
+        query = self.__normalize(f"{track['name']} {track['artist']}")
         res = self.session.search(query)
         tidal_id = None
         try:
@@ -31,9 +31,10 @@ class TidalClient:
                     tidal_id = t.id
                     break
             if not tidal_id:
-                print(res["tracks"])
-                # possible_ids = filter(lambda s: artists in s.artist.name, res['tracks'])
-                # tidal_id = list(possible_ids)[0].id
+                possible_ids = filter(
+                    lambda s: track["artist"] in s.artist.name, res["tracks"]
+                )
+                tidal_id = list(possible_ids)[0].id
         except Exception:
             pass
 
