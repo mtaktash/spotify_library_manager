@@ -7,6 +7,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--client_id")
     parser.add_argument("--client_secret")
+    parser.add_argument("--redirect_uri", default="http://127.0.0.1:9090")
     return parser.parse_args()
 
 
@@ -15,7 +16,7 @@ if __name__ == "__main__":
     spotify_client = SpotifyClient(
         client_id=args.client_id,
         client_secret=args.client_secret,
-        redirect_uri="http://127.0.0.1:9090",
+        redirect_uri=args.redirect_uri,
         scope="user-library-read",
     )
 
