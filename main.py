@@ -1,14 +1,33 @@
 import argparse
+from typing import List
 from pprint import pprint
-from spotify_manager import SpotifyClient
+from spotify_client import SpotifyClient
+from tidal_client import TidalClient
 
 
 def parse_args():
     parser = argparse.ArgumentParser()
+    parser.add_argument("spotify_playlist_name")
+    parser.add_argument("tidal_playlist_name")
     parser.add_argument("--client_id")
     parser.add_argument("--client_secret")
     parser.add_argument("--redirect_uri", default="http://127.0.0.1:9090")
     return parser.parse_args()
+
+
+def parse_spotify_artists(artists: List):
+    return [item["name"] for item in artists]
+
+
+def parse_spotify_tracks(tracks: List):
+    return [
+        dict(
+            name=item["track"]["name"],
+            artists=parse_spotify_artists(item["track"]["artists"]),
+            isrc=item["track"]["external_ids"]["isrc"],
+        )
+        for item in tracks
+    ]
 
 
 if __name__ == "__main__":
@@ -20,6 +39,26 @@ if __name__ == "__main__":
         scope="user-library-read",
     )
 
+    tidal_client = TidalClient()
+
+    print("Connecting to Spotify account...")
     spotify_client.login()
 
-    pprint(spotify_client.sp.me())
+    print("Connecting to Tidal account...")
+    tidal_client.login()
+
+    print("Loading Spotify playlist tracks...")
+    tracks = spotify_client.load_playlist_tracks(args.spotify_playlist_name)
+    parsed_tracks = parse_spotify_tracks(tracks)
+
+    print("Searching Tidal...")
+
+    tids = list()
+    for track in parsed_tracks:
+        res: str | None = tidal_client.search_track(track)
+        if not res:
+            print(f"Skipped track {track['name']} {' '.join(track['artists'])}")
+            continue
+        tids.append(res)
+
+    tidal_client.add_to_playlist(args.tidal_playlist_name, tids)
