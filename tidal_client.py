@@ -1,6 +1,7 @@
 import re
 import tidalapi
-from typing import Any, List
+from typing import Dict, List
+from pprint import pprint
 
 
 class TidalClient:
@@ -10,23 +11,24 @@ class TidalClient:
     def login(self):
         self.session.login_oauth_simple()
 
-    @staticmethod
-    def __normalize(query: str) -> str:
-        normalized = "".join(
-            filter(lambda character: ord(character) < 0xFF, query.lower())
-        )
-        normalized = (
-            query.split("-")[0].strip().split("(")[0].strip().split("[")[0].strip()
-        )
-        normalized = re.sub(r"\s+", " ", normalized)
-        return normalized
-
-    def search_track(self, track) -> str | None:
-        query = self.__normalize(f"{track['name']} {track['artist']}")
-        res = self.session.search(query)
+    def search_track(self, track: Dict):
+        found_tracks = []
         tidal_id = None
+
+        # search artist name
+        query = f"{track['artist']} {track['name']}"
+        query = query.lower()
+        res = self.session.search(query)
+        found_tracks.extend(res["tracks"])
+
+        # search name artist
+        query = f"{track['name']} {track['artist']}"
+        query = query.lower()
+        res = self.session.search(query)
+        found_tracks.extend(res["tracks"])
+
         try:
-            for t in res["tracks"]:
+            for t in found_tracks:
                 if t.isrc == track["isrc"]:
                     tidal_id = t.id
                     break
@@ -35,7 +37,7 @@ class TidalClient:
                     lambda s: track["artist"] in s.artist.name, res["tracks"]
                 )
                 tidal_id = list(possible_ids)[0].id
-        except Exception:
+        except Exception as e:
             pass
 
         return tidal_id
