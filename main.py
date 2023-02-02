@@ -28,7 +28,6 @@ def parse_spotify_tracks(tracks: List):
     ]
 
 
-s
 if __name__ == "__main__":
     args = parse_args()
     spotify_client = SpotifyClient(

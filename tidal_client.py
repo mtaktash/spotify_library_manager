@@ -1,7 +1,6 @@
 import re
 import tidalapi
 from typing import Dict, List
-from pprint import pprint
 
 
 class TidalClient:
