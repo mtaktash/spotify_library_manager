@@ -2,8 +2,9 @@
 
 ## Setup
 1. `pip install -r requirements.txt`
-2. Get `client_id` and `client_secret` by creating an app on https://developer.spotify.com/. Set `redirect_uri` to something like `http://127.0.0.1:9090`
-3. Create `.env` file with spotify details. The first run will also save tidal login details in `.env` file
+2. Get `client_id` and `client_secret` by creating an app on https://developer.spotify.com/dashboard
+3. Set `redirect_uri` in app settings to something like `http://127.0.0.1:9090`
+4. Create `.env` file with spotify details. The first run will also save tidal login details in `.env` file
 ```
 SPOTIFY_CLIENT_ID=%client_id% 
 SPOTIFY_CLIENT_SECRET=%client_secret%
