@@ -15,6 +15,7 @@ def parse_spotify_track(track: Dict):
         artist=track["track"]["artists"][0]["name"],
         album=track["track"]["album"]["name"],
         isrc=track["track"]["external_ids"]["isrc"],
+        spotify_id=track["track"]["id"],
     )
 
 

@@ -79,9 +79,9 @@ if __name__ == "__main__":
 
     print(f"Using prefix {prefix} for tidal playlists")
 
+    save_missing_path = args.save_missing_path
     if args.save_missing:
         os.makedirs(LOGS_DIR, exist_ok=True)
-        save_missing_path = args.save_missing_path
         if not save_missing_path:
             save_missing_path = os.path.join(
                 LOGS_DIR, f"missing_{datetime.datetime.now()}.json"
