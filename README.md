@@ -23,8 +23,9 @@ SPOTIFY_SCOPE="user-library-read"
 - Run `python transfer_all_playlists_from_spotify_to_tidal.py -f`
   - All arguments are the same
 ### Transfer playlists from a list
-- Create a list of playlists, example list is in `playlists.txt`. It should contain eigher user playlists names or spotify playlist links
-  - Run `bash transfer_playlists_list.sh playlists.txt`
-  - Missing tracks will be automatically saved
+- Create a list of playlists, example list is in `playlists.txt` 
+- It should contain spotify playlist links or playlist names (but only for playlists created by the logged user)
+- Run `bash transfer_playlists_list.sh playlists.txt`
+- Missing tracks will be automatically saved
  
 Was inspired by https://github.com/canta2899/spotify-to-tidal 
