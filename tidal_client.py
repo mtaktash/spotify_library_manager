@@ -107,9 +107,9 @@ class TidalClient:
         if tidal_id:
             return tidal_id
 
-        # for cases when artist name is missing whitespaces
+        # for cases when artist name is missing whitespaces (like A.R. Kane and A. R. Kane.)
         tidal_id = self._artist_name_search_query_result(
-            track["artist"].replace(".", ". "),
+            track["artist"].replace(".", ". ").replace("  ", " "),
             track["name"],
             track["isrc"],
         )
