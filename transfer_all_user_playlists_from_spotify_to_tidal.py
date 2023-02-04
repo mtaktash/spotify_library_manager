@@ -1,4 +1,5 @@
 import argparse
+import datetime
 import os
 from typing import List
 
@@ -20,6 +21,8 @@ TIDAL_TOKEN_TYPE: str = os.getenv("TIDAL_TOKEN_TYPE")
 TIDAL_ACCESS_TOKEN: str = os.getenv("TIDAL_ACCESS_TOKEN")
 TIDAL_REFRESH_TOKEN: str = os.getenv("TIDAL_REFRESH_TOKEN")
 TIDAL_EXPIRY_TIME: str = os.getenv("TIDAL_EXPIRY_TIME")
+
+LOGS_DIR = "logs"
 
 
 def parse_args():
@@ -71,6 +74,13 @@ if __name__ == "__main__":
 
     print(f"Using prefix {prefix} for tidal playlists")
 
+    if args.save_missing:
+        os.makedirs(LOGS_DIR, exist_ok=True)
+        save_missing_path = os.path.join(LOGS_DIR, f"missing_{datetime.datetime.now()}.json")
+        print(f"Saving missing tracks to {save_missing_path}")
+    else:
+        save_missing_path = None
+
     all_spotify_playlists = spotify_client.load_all_user_playlists()
 
     for p in all_spotify_playlists:
@@ -92,4 +102,5 @@ if __name__ == "__main__":
             tidal_client,
             args.f,
             args.save_missing,
+            save_missing_path
         )

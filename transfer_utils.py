@@ -8,8 +8,6 @@ from tqdm import tqdm
 from spotify_client import SpotifyClient
 from tidal_client import TidalClient
 
-LOGS_DIR = "logs"
-
 
 def parse_spotify_track(track: Dict):
     return dict(
@@ -26,10 +24,9 @@ def transfer_playlist(
     spotify_client: SpotifyClient,
     tidal_client: TidalClient,
     rewrite: bool = False,
-    save_missing_tracks: bool = False,
+    save_missing: bool = False,
+    save_missing_path: str = None,
 ):
-    timestamp = datetime.datetime.now()
-        
     tracks: List[Dict] = spotify_client.load_playlist_tracks(spotify_playlist_name)
     missing_tracks = list()
     tids = list()
@@ -40,9 +37,8 @@ def transfer_playlist(
 
         if not res:
             print(f"Skipped track {parsed_track['name']} {parsed_track['artist']}")
-            if save_missing_tracks:
+            if save_missing:
                 missing_tracks.append(track)
-
             continue
 
         tids.append(res)
@@ -54,15 +50,21 @@ def transfer_playlist(
     if rewrite:
         tidal_client.delete_playlist(tidal_playlist_name)
 
-    playlist_desc = f"Created from spotify on {timestamp}"
+    playlist_desc = f"Created from spotify on {datetime.datetime.now()}"
     tidal_client.create_playlist(tidal_playlist_name, playlist_desc, tids)
 
-    if save_missing_tracks:
-        os.makedirs(LOGS_DIR, exist_ok=True)
-        filename = os.path.join(LOGS_DIR, f"missing_tracks_{timestamp}.json")
-        
-        print(f"Saving missing tracks to {filename}")
+    if save_missing:
+        print(f"Saving missing tracks to {save_missing_path}")
         parsed_missing_tracks = [parse_spotify_track(track) for track in missing_tracks]
+        all_missing_tracks = list()
 
-        with open(filename, "w") as out:
-            json.dump(parsed_missing_tracks, out)
+        if os.path.exists(save_missing_path):
+            with open(save_missing_path, "r") as f:
+                loaded_missing_tracks = json.load(f)
+
+            all_missing_tracks = loaded_missing_tracks
+
+        all_missing_tracks.extend(parsed_missing_tracks)
+
+        with open(save_missing_path, "w") as f:
+            json.dump(parsed_missing_tracks, f)
