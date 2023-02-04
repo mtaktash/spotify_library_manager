@@ -39,6 +39,24 @@ def parse_spotify_tracks(tracks: List):
     ]
 
 
+def transfer_playlist(
+    spotify_playlist_name: str,
+    tidal_playlist_name: str,
+    spotify_client: SpotifyClient,
+    tidal_client: TidalClient,
+):
+    tracks = spotify_client.load_playlist_tracks(spotify_playlist_name)
+    parsed_tracks = parse_spotify_tracks(tracks)
+    tids = list()
+    for track in tqdm(parsed_tracks, "Searching tracks on tidal..."):
+        res: str | None = tidal_client.search_track(track)
+        if not res:
+            print(f"Skipped track {track['name']} {track['artist']}")
+            continue
+        tids.append(res)
+    tidal_client.add_to_playlist(tidal_playlist_name, tids)
+
+
 if __name__ == "__main__":
     args = parse_args()
     spotify_client = SpotifyClient(
@@ -61,17 +79,12 @@ if __name__ == "__main__":
     print("Connecting to Tidal account...")
     tidal_client.login()
 
-    print("Loading Spotify playlist tracks...")
-    tracks = spotify_client.load_playlist_tracks(args.spotify_playlist_name)
-    parsed_tracks = parse_spotify_tracks(tracks)
-
-    print("Searching Tidal...")
-    tids = list()
-    for track in tqdm(parsed_tracks):
-        res: str | None = tidal_client.search_track(track)
-        if not res:
-            print(f"Skipped track {track['name']} {track['artist']}")
-            continue
-        tids.append(res)
-
-    tidal_client.add_to_playlist(args.tidal_playlist_name, tids)
+    print(
+        f'Transferring spotify playlist "{args.spotify_playlist_name}" to tidal playlist "{args.tidal_playlist_name}"'
+    )
+    transfer_playlist(
+        args.spotify_playlist_name,
+        args.tidal_playlist_name,
+        spotify_client,
+        tidal_client,
+    )
