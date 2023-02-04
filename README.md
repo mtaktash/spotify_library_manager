@@ -27,5 +27,11 @@ SPOTIFY_SCOPE="user-library-read"
 - It should contain spotify playlist links or playlist names (but only for playlists created by the logged user)
 - Run `bash transfer_playlists_list.sh playlists.txt`
 - Missing tracks will be automatically saved
+
+### Download all playlists
+- Run `tidal-dl` to setup settings of the downloader
+- Run `bash download_tidal_playlists.sh %prefix%`
+- `prefix` is the starting prefix for tidal playlists you want to download. Leave empty to download all playlists 
  
 Was inspired by https://github.com/canta2899/spotify-to-tidal 
+

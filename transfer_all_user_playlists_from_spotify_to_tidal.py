@@ -4,7 +4,6 @@ import os
 from typing import List
 
 from dotenv import load_dotenv, find_dotenv
-from tqdm import tqdm
 
 from spotify_client import SpotifyClient
 from tidal_client import TidalClient
@@ -35,7 +34,6 @@ def parse_args():
     )
     parser.add_argument(
         "--prefix",
-        type=str,
         help="Prefix to use with tidal playlist names, will use spotify user name if empty",
     )
     parser.add_argument(

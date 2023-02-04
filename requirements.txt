@@ -4,3 +4,4 @@ tqdm
 python-dotenv
 python-dateutil
 transliterate
+tidal-dl
