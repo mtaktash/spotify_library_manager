@@ -26,6 +26,9 @@ class SpotifyClient:
             )
         )
 
+    def get_user_name(self):
+        return self.sp.current_user()["display_name"]
+
     def load_all_user_playlists(self) -> List[Dict]:
         all_items = []
         playlists = self.sp.current_user_playlists()

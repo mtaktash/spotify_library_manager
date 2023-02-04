@@ -58,7 +58,7 @@ class TidalClient:
         return res["tracks"]
 
     def process_search_query_result(
-        self, result: List[tidalapi.Track], isrc: str, artist: str, album: str
+        self, result: List[tidalapi.Track], isrc: str, artist: str
     ) -> int | None:
         for t in result:
             if t.isrc == isrc:
@@ -68,7 +68,7 @@ class TidalClient:
         # search in the query results
         possible_ids = list(
             filter(
-                lambda s: artist in s.artist.name and album in s.album.name,
+                lambda s: artist in s.artist.name,
                 result,
             )
         )
@@ -88,7 +88,7 @@ class TidalClient:
         )
 
         tidal_id = self.process_search_query_result(
-            found_tracks, track["isrc"], track["artist"], track["album"]
+            found_tracks, track["isrc"], track["artist"]
         )
         if tidal_id:
             return tidal_id
@@ -104,6 +104,4 @@ class TidalClient:
             self.get_search_query_result(f"{track['name']} {artist_ru}")
         )
 
-        return self.process_search_query_result(
-            found_tracks, track["isrc"], artist_ru, track["album"]
-        )
+        return self.process_search_query_result(found_tracks, track["isrc"], artist_ru)
