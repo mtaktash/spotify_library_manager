@@ -2,3 +2,4 @@ spotipy
 tidalapi
 tqdm
 python-dotenv
+transliterate

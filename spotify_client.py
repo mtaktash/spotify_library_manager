@@ -1,3 +1,5 @@
+from typing import Dict, List
+
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
@@ -24,7 +26,7 @@ class SpotifyClient:
             )
         )
 
-    def load_all_user_playlists(self):
+    def load_all_user_playlists(self) -> List[Dict]:
         all_items = []
         playlists = self.sp.current_user_playlists()
         while playlists:
@@ -35,10 +37,11 @@ class SpotifyClient:
                 playlists = None
         return all_items
 
-    def load_playlist(self, playlist_name: str):
+    def load_playlist(self, playlist_name: str) -> Dict | None:
         for playlist in self.load_all_user_playlists():
             if playlist["name"] == playlist_name:
                 return playlist
+        return None
 
     def load_playlist_tracks(self, playlist_name: str):
         playlist_info = self.load_playlist(playlist_name)

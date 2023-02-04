@@ -7,6 +7,7 @@ from tqdm import tqdm
 
 from spotify_client import SpotifyClient
 from tidal_client import TidalClient
+from transfer_utils import transfer_playlist
 
 load_dotenv(find_dotenv())
 
@@ -25,40 +26,17 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("spotify_playlist_name")
     parser.add_argument("tidal_playlist_name")
+    parser.add_argument(
+        "-f",
+        action="store_true",
+        help="If playlist with tidal_playlist_name exists, delete it and rewrite it",
+    )
     return parser.parse_args()
-
-
-def parse_spotify_tracks(tracks: List):
-    return [
-        dict(
-            name=item["track"]["name"],
-            artist=item["track"]["artists"][0]["name"],
-            isrc=item["track"]["external_ids"]["isrc"],
-        )
-        for item in tracks
-    ]
-
-
-def transfer_playlist(
-    spotify_playlist_name: str,
-    tidal_playlist_name: str,
-    spotify_client: SpotifyClient,
-    tidal_client: TidalClient,
-):
-    tracks = spotify_client.load_playlist_tracks(spotify_playlist_name)
-    parsed_tracks = parse_spotify_tracks(tracks)
-    tids = list()
-    for track in tqdm(parsed_tracks, "Searching tracks on tidal..."):
-        res: str | None = tidal_client.search_track(track)
-        if not res:
-            print(f"Skipped track {track['name']} {track['artist']}")
-            continue
-        tids.append(res)
-    tidal_client.add_to_playlist(tidal_playlist_name, tids)
 
 
 if __name__ == "__main__":
     args = parse_args()
+
     spotify_client = SpotifyClient(
         client_id=SPOTIFY_CLIENT_ID,
         client_secret=SPOTIFY_CLIENT_SECRET,
@@ -82,9 +60,15 @@ if __name__ == "__main__":
     print(
         f'Transferring spotify playlist "{args.spotify_playlist_name}" to tidal playlist "{args.tidal_playlist_name}"'
     )
+    if args.f:
+        print(
+            f'-f argument is given, rewriting playlist "{args.tidal_playlist_name}" on tidal'
+        )
+
     transfer_playlist(
         args.spotify_playlist_name,
         args.tidal_playlist_name,
         spotify_client,
         tidal_client,
+        args.f,
     )

@@ -2,6 +2,7 @@ from typing import Dict, List
 
 import tidalapi
 from dotenv import find_dotenv, load_dotenv, set_key
+from transliterate import translit
 
 
 class TidalClient:
@@ -15,19 +16,13 @@ class TidalClient:
         self._expiry_time: str = expiry_time
 
     def login(self):
-        if (
-            self._token_type
-            and self._access_token
-            and self._refresh_token
-            and self._expiry_time
-        ):
-            self.session.load_oauth_session(
-                self._token_type,
-                self._access_token,
-                self._refresh_token,
-                self._expiry_time,
-            )
-        else:
+        self.session.load_oauth_session(
+            self._token_type,
+            self._access_token,
+            self._refresh_token,
+            self._expiry_time,
+        )
+        if not self.session.check_login:
             self.session.login_oauth_simple()
 
             dotenv_file = find_dotenv()
@@ -38,39 +33,77 @@ class TidalClient:
             set_key(dotenv_file, "TIDAL_REFRESH_TOKEN", self.session.refresh_token)
             set_key(dotenv_file, "TIDAL_EXPIRY_TIME", str(self.session.expiry_time))
 
-    def search_track(self, track: Dict):
-        found_tracks = []
-        tidal_id = None
+    def load_all_user_playlists(self) -> List[tidalapi.playlist.UserPlaylist]:
+        return self.session.user.playlists()
 
-        # search artist name
-        query = f"{track['artist']} {track['name']}"
-        query = query.lower()
-        res = self.session.search(query)
-        found_tracks.extend(res["tracks"])
+    def load_playlist(
+        self, playlist_name: str
+    ) -> tidalapi.playlist.UserPlaylist | None:
+        for playlist in self.load_all_user_playlists():
+            if playlist.name == playlist_name:
+                return playlist
+        return None
 
-        # search name artist
-        query = f"{track['name']} {track['artist']}"
-        query = query.lower()
-        res = self.session.search(query)
-        found_tracks.extend(res["tracks"])
+    def delete_playlist(self, playlist_name: str):
+        playlist = self.load_playlist(playlist_name)
+        if playlist:
+            playlist.delete()
 
-        try:
-            for t in found_tracks:
-                if t.isrc == track["isrc"]:
-                    tidal_id = t.id
-                    break
-            if not tidal_id:
-                possible_ids = filter(
-                    lambda s: track["artist"] in s.artist.name, res["tracks"]
-                )
-                tidal_id = list(possible_ids)[0].id
-        except Exception:
-            pass
-
-        return tidal_id
-
-    def add_to_playlist(self, playlist_name: str, tids: List[str]):
-        playlist = self.session.user.create_playlist(
-            playlist_name, "Songs saved from spotify"
-        )
+    def create_playlist(self, playlist_name: str, playlist_desc: str, tids: List[str]):
+        playlist = self.session.user.create_playlist(playlist_name, playlist_desc)
         playlist.add(tids)
+
+    def get_search_query_result(self, text: str) -> List[tidalapi.Track]:
+        res = self.session.search(text.lower())
+        return res["tracks"]
+
+    def process_search_query_result(
+        self, result: List[tidalapi.Track], isrc: str, artist: str, album: str
+    ) -> int | None:
+        for t in result:
+            if t.isrc == isrc:
+                tidal_id = t.id
+                return tidal_id
+
+        # search in the query results
+        possible_ids = list(
+            filter(
+                lambda s: artist in s.artist.name and album in s.album.name,
+                result,
+            )
+        )
+        if possible_ids:
+            tidal_id = possible_ids[0].id
+            return tidal_id
+
+        return None
+
+    def search_track(self, track: Dict) -> str | None:
+        found_tracks = []
+        found_tracks.extend(
+            self.get_search_query_result(f"{track['artist']} {track['name']}")
+        )
+        found_tracks.extend(
+            self.get_search_query_result(f"{track['name']} {track['artist']}")
+        )
+
+        tidal_id = self.process_search_query_result(
+            found_tracks, track["isrc"], track["artist"], track["album"]
+        )
+        if tidal_id:
+            return tidal_id
+
+        # for cases when tracks are transliterated (currently only Cyrillics to Latin)
+        artist_ru = translit(track["artist"], "ru")
+
+        found_tracks = []
+        found_tracks.extend(
+            self.get_search_query_result(f"{artist_ru} {track['name']}")
+        )
+        found_tracks.extend(
+            self.get_search_query_result(f"{track['name']} {artist_ru}")
+        )
+
+        return self.process_search_query_result(
+            found_tracks, track["isrc"], artist_ru, track["album"]
+        )
