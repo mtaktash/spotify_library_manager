@@ -6,7 +6,8 @@
 ```SPOTIFY_CLIENT_ID=%client_id% 
 SPOTIFY_CLIENT_SECRET=%client_secret%
 SPOTIFY_REDIRECT_URI=%redirect_uri%
-SPOTIFY_SCOPE="user-library-read"```
+SPOTIFY_SCOPE="user-library-read"
+```
 
 4. `python main.py "spotify playlist name" "tidal playlist name"`
 
