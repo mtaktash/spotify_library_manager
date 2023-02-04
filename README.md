@@ -12,7 +12,7 @@ SPOTIFY_REDIRECT_URI=%redirect_uri%
 SPOTIFY_SCOPE="user-library-read"
 ```
 5. The first run will also save tidal login details in `.env` file
-6. You need to have paid tidal account
+6. You need to have a paid tidal account
 
 ## Scenarios
 ### Transfer one playlist:
