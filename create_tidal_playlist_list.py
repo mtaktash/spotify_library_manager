@@ -1,7 +1,8 @@
 import argparse
 import os
+from pathlib import Path
 
-from dotenv import load_dotenv, find_dotenv
+from dotenv import find_dotenv, load_dotenv
 
 from tidal_client import TidalClient
 
@@ -12,7 +13,7 @@ TIDAL_ACCESS_TOKEN: str = os.getenv("TIDAL_ACCESS_TOKEN")
 TIDAL_REFRESH_TOKEN: str = os.getenv("TIDAL_REFRESH_TOKEN")
 TIDAL_EXPIRY_TIME: str = os.getenv("TIDAL_EXPIRY_TIME")
 
-ID_FILENAME: str = "logs/temp_playlist_ids.txt"
+ID_FILENAME: Path = Path("logs/temp_playlist_ids.txt")
 
 
 def parse_args():
@@ -43,6 +44,9 @@ if __name__ == "__main__":
     for playlist in all_playlists:
         if not args.prefix or (args.prefix and playlist.name.startswith(args.prefix)):
             all_ids.append(playlist.id)
+
+    ID_FILENAME.parent.mkdir()
+    ID_FILENAME.touch()
 
     print(f"Writing ids to {ID_FILENAME}")
     with open(ID_FILENAME, "w") as f:
