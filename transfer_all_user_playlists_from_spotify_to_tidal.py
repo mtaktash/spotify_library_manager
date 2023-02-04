@@ -97,7 +97,7 @@ if __name__ == "__main__":
         transfer_playlist(
             spotify_playlist_name,
             tidal_playlist_name,
-            "s",
+            "",
             spotify_client,
             tidal_client,
             args.rewrite,
