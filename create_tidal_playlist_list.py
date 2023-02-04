@@ -45,7 +45,7 @@ if __name__ == "__main__":
         if not args.prefix or (args.prefix and playlist.name.startswith(args.prefix)):
             all_ids.append(playlist.id)
 
-    ID_FILENAME.parent.mkdir()
+    ID_FILENAME.parent.mkdir(exist_ok=True, parents=True)
     ID_FILENAME.touch()
 
     print(f"Writing ids to {ID_FILENAME}")

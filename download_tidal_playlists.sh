@@ -11,7 +11,7 @@ export FILENAME="logs/temp_playlist_ids.txt"
 rm -rf $FILENAME
 
 # find playlist ids
-python create_tidal_playlist_list.py $PREFIX
+python create_tidal_playlist_list.py --prefix $PREFIX
 
 # download 
 while IFS= read -r line; do
