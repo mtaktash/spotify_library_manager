@@ -17,13 +17,14 @@ class TidalClient:
         self._expiry_time: str = expiry_time
 
     def login(self):
-        self.session.load_oauth_session(
-            self._token_type,
-            self._access_token,
-            self._refresh_token,
-            self._expiry_time,
-        )
-        if not self.session.check_login:
+        try:
+            self.session.load_oauth_session(
+                self._token_type,
+                self._access_token,
+                self._refresh_token,
+                self._expiry_time,
+            )
+        except Exception:
             self.session.login_oauth_simple()
 
             dotenv_file = find_dotenv()
