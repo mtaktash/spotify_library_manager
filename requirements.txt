@@ -1,3 +1,4 @@
 spotipy
 tidalapi
 tqdm
+python-dotenv
