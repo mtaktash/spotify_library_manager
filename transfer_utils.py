@@ -65,7 +65,7 @@ def transfer_playlist(
     if rewrite:
         tidal_client.delete_playlist(tidal_playlist_name)
 
-    playlist_desc = f"Created from spotify on {datetime.datetime.now()}"
+    playlist_desc = f"Created from spotify playlist {spotify_playlist['external_urls']['spotify']} on {datetime.datetime.now()}"
     tidal_client.create_playlist(tidal_playlist_name, playlist_desc, tids)
 
     if save_missing:

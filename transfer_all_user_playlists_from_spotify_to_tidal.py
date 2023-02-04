@@ -43,6 +43,10 @@ def parse_args():
         action="store_true",
         help="Save missing tracks in logs/",
     )
+    parser.add_argument(
+        "--save_missing_path",
+        help="Save missing tracks in logs/save_missing_path",
+    )
     return parser.parse_args()
 
 
@@ -77,12 +81,12 @@ if __name__ == "__main__":
 
     if args.save_missing:
         os.makedirs(LOGS_DIR, exist_ok=True)
-        save_missing_path = os.path.join(
-            LOGS_DIR, f"missing_{datetime.datetime.now()}.json"
-        )
+        save_missing_path = args.save_missing_path
+        if not save_missing_path:
+            save_missing_path = os.path.join(
+                LOGS_DIR, f"missing_{datetime.datetime.now()}.json"
+            )
         print(f"Saving missing tracks to {save_missing_path}")
-    else:
-        save_missing_path = None
 
     all_spotify_playlists = spotify_client.load_all_user_playlists()
 

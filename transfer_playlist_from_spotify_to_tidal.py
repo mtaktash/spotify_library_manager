@@ -1,6 +1,6 @@
 import argparse
+import datetime
 import os
-from typing import List
 
 from dotenv import load_dotenv, find_dotenv
 from tqdm import tqdm
@@ -21,6 +21,8 @@ TIDAL_ACCESS_TOKEN: str = os.getenv("TIDAL_ACCESS_TOKEN")
 TIDAL_REFRESH_TOKEN: str = os.getenv("TIDAL_REFRESH_TOKEN")
 TIDAL_EXPIRY_TIME: str = os.getenv("TIDAL_EXPIRY_TIME")
 
+LOGS_DIR = "logs"
+
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -38,6 +40,15 @@ def parse_args():
     parser.add_argument(
         "--prefix",
         help="Prefix to use with tidal playlist names, will use spotify user name if empty",
+    )
+    parser.add_argument(
+        "--save_missing",
+        action="store_true",
+        help="Save missing tracks in logs/save_missing_path",
+    )
+    parser.add_argument(
+        "--save_missing_path",
+        help="Save missing tracks in logs/save_missing_path",
     )
     return parser.parse_args()
 
@@ -65,6 +76,15 @@ if __name__ == "__main__":
     print("Connecting to Tidal account...")
     tidal_client.login()
 
+    if args.save_missing:
+        os.makedirs(LOGS_DIR, exist_ok=True)
+        save_missing_path = args.save_missing_path
+        if not save_missing_path:
+            save_missing_path = os.path.join(
+                LOGS_DIR, f"missing_{datetime.datetime.now()}.json"
+            )
+        print(f"Saving missing tracks to {save_missing_path}")
+
     transfer_playlist(
         args.spotify_playlist_name,
         args.tidal_playlist_name,
@@ -72,4 +92,6 @@ if __name__ == "__main__":
         spotify_client,
         tidal_client,
         args.rewrite,
+        args.save_missing,
+        save_missing_path,
     )
