@@ -10,8 +10,14 @@ SPOTIFY_REDIRECT_URI=%redirect_uri%
 SPOTIFY_SCOPE="user-library-read"
 ```
 
-4. `python transfer_playlist_from_spotify_to_tidal.py "spotify playlist name" "tidal playlist name"`. Use `-f` option to rewrite playlist (deletes all playlists with this name)
-5. The first run will save tidal login details in `.env` file
+The first run will save tidal login details in `.env` file
 
-
-Heavily inspired by https://github.com/canta2899/spotify-to-tidal 
+4. Transfer one playlist:
+  - Run `python transfer_playlist_from_spotify_to_tidal.py "spotify playlist name" "tidal playlist name"`. 
+  - Use `-f` option to rewrite playlist (deletes all playlists with this name)
+5. Transfer all user playlists
+  - Run `python transfer_all_playlists_from_spotify_to_tidal.py`
+  - Use `-f` option to rewrite playlist (deletes all playlists with this name)
+  - Use `--prefix` to create custom name, otherwise it'll use displayed spotify user name 
+  
+Was inspired by https://github.com/canta2899/spotify-to-tidal 
