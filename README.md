@@ -12,19 +12,19 @@ SPOTIFY_SCOPE="user-library-read"
 ```
 
 ## Scenarios
-1. Transfer one playlist:
-  - Run `python transfer_playlist_from_spotify_to_tidal.py -f "spotify playlist name" "tidal playlist name"`.
-    - Pass `tidal playlist name` as an empty string `""` to create playlist name from spotify user name (or specified prefix) and spotify playlist name
-    - Use `-f` option to rewrite playlist (deletes all playlists with this name)
-    - Use `--prefix` to create custom name, otherwise it'll use displayed spotify user name
-    - Use `--save_missing` to save missing tracks in `logs/%save_missing_path%` as json
-    - Use `--save_missing_path` to save missing tracks in `logs/%save_missing_path%` as json
-2. Transfer all logged user playlists
-  - Run `python transfer_all_playlists_from_spotify_to_tidal.py -f`
-    - All arguments are the same
- 3. Transfer playlists from a list
-  - Create a list of playlists, example list is in `playlists.txt`. It should contain eigher user playlists names or spotify playlist links
-    - Run `bash transfer_playlists_list.sh playlists.txt`
-    - Missing tracks will be automatically saved
+### Transfer one playlist:
+- Run `python transfer_playlist_from_spotify_to_tidal.py -f "spotify playlist name" "tidal playlist name"`.
+  - Pass `tidal playlist name` as an empty string `""` to create playlist name from spotify user name (or specified prefix) and spotify playlist name
+  - Use `-f` option to rewrite playlist (deletes all playlists with this name)
+  - Use `--prefix` to create custom name, otherwise it'll use displayed spotify user name
+  - Use `--save_missing` to save missing tracks in `logs/%save_missing_path%` as json
+  - Use `--save_missing_path` to save missing tracks in `logs/%save_missing_path%` as json
+### Transfer all logged user playlists
+- Run `python transfer_all_playlists_from_spotify_to_tidal.py -f`
+  - All arguments are the same
+### Transfer playlists from a list
+- Create a list of playlists, example list is in `playlists.txt`. It should contain eigher user playlists names or spotify playlist links
+  - Run `bash transfer_playlists_list.sh playlists.txt`
+  - Missing tracks will be automatically saved
  
 Was inspired by https://github.com/canta2899/spotify-to-tidal 
