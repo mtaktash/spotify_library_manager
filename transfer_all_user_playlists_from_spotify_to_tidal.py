@@ -76,7 +76,9 @@ if __name__ == "__main__":
 
     if args.save_missing:
         os.makedirs(LOGS_DIR, exist_ok=True)
-        save_missing_path = os.path.join(LOGS_DIR, f"missing_{datetime.datetime.now()}.json")
+        save_missing_path = os.path.join(
+            LOGS_DIR, f"missing_{datetime.datetime.now()}.json"
+        )
         print(f"Saving missing tracks to {save_missing_path}")
     else:
         save_missing_path = None
@@ -102,5 +104,5 @@ if __name__ == "__main__":
             tidal_client,
             args.f,
             args.save_missing,
-            save_missing_path
+            save_missing_path,
         )

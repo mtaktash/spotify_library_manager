@@ -61,10 +61,9 @@ def transfer_playlist(
         if os.path.exists(save_missing_path):
             with open(save_missing_path, "r") as f:
                 loaded_missing_tracks = json.load(f)
-
-            all_missing_tracks = loaded_missing_tracks
+            all_missing_tracks.extend(loaded_missing_tracks)
 
         all_missing_tracks.extend(parsed_missing_tracks)
 
         with open(save_missing_path, "w") as f:
-            json.dump(parsed_missing_tracks, f)
+            json.dump(all_missing_tracks, f)
