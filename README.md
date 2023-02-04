@@ -34,7 +34,7 @@ SPOTIFY_SCOPE="user-library-read"
 - Run `bash transfer_playlists_list.sh playlists.txt`
 - Missing tracks will be automatically saved
 
-### Download 
+### download 
 #### tidal playlists
 - Run `tidal-dl` to setup the downloader
 - Run `bash download_tidal_playlists.sh %prefix%`
