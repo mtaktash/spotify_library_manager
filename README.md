@@ -11,6 +11,7 @@ SPOTIFY_SCOPE="user-library-read"
 ```
 
 4. `python main.py "spotify playlist name" "tidal playlist name"`
+5. The first run will save tidal login details in `.env` file
 
 
 Heavily inspired by https://github.com/canta2899/spotify-to-tidal 
