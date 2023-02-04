@@ -77,30 +77,20 @@ class TidalClient:
 
         return None
 
-    def _artist_all_tracks_search_query_result(
-        self, artist: str, name: str, isrc: str
-    ) -> int | None:
-        result = self.session.search(f"{artist}")["artists"]
-
-        for item in result:
-            print(item)
-            print(item.name)
-
-        # search in the query results
-        possible_artists = list(
-            filter(
-                lambda s: artist in s.name,
-                result,
-            )
-        )
-        print(possible_artists)
-        return None
-
     def search_track(self, track: Dict) -> str | None:
         # search artist name first
         tidal_id = self._artist_name_search_query_result(
             track["artist"],
             track["name"],
+            track["isrc"],
+        )
+        if tidal_id:
+            return tidal_id
+
+        # for cases when there's a longer spotify name (like - Original Mix)
+        tidal_id = self._artist_name_search_query_result(
+            track["artist"],
+            track["name"].split("-")[0],
             track["isrc"],
         )
         if tidal_id:
@@ -117,9 +107,11 @@ class TidalClient:
         if tidal_id:
             return tidal_id
 
-        # # search artist album tracks
-        # tidal_id = self._artist_all_tracks_search_query_result(
-        #     track["artist"],
-        #     track["name"],
-        #     track["isrc"],
-        # )
+        # for cases when artist name is missing whitespaces
+        tidal_id = self._artist_name_search_query_result(
+            track["artist"].replace(".", ". "),
+            track["name"],
+            track["isrc"],
+        )
+        if tidal_id:
+            return tidal_id

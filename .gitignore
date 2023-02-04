@@ -134,3 +134,8 @@ dmypy.json
 # logs 
 logs/
 debug_*
+
+# jupyter stuff
+.DS_Store
+*.ipynb_checkpoints
+*.ipynb
