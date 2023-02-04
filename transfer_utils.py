@@ -21,13 +21,28 @@ def parse_spotify_track(track: Dict):
 def transfer_playlist(
     spotify_playlist_name: str,
     tidal_playlist_name: str,
+    prefix: str,
     spotify_client: SpotifyClient,
     tidal_client: TidalClient,
     rewrite: bool = False,
     save_missing: bool = False,
     save_missing_path: str = None,
 ):
-    tracks: List[Dict] = spotify_client.load_playlist_tracks(spotify_playlist_name)
+    spotify_playlist = spotify_client.load_playlist(spotify_playlist_name)
+    tracks: List[Dict] = spotify_client.load_playlist_tracks(spotify_playlist)
+
+    if not prefix:
+        prefix = spotify_client.get_user_name()
+
+    tidal_playlist_name = f"{prefix} {spotify_playlist['name']}"
+    print(
+        f'\nTransferring spotify playlist "{spotify_playlist["name"]}" to tidal playlist "{tidal_playlist_name}"'
+    )
+    if rewrite:
+        print(
+            f'--rewrite argument is given, rewriting playlist "{tidal_playlist_name}" on tidal'
+        )
+
     missing_tracks = list()
     tids = list()
     for track in tqdm(tracks, "Searching tracks on tidal..."):
@@ -59,11 +74,11 @@ def transfer_playlist(
         all_missing_tracks = list()
 
         if os.path.exists(save_missing_path):
-            with open(save_missing_path, "r") as f:
+            with open(save_missing_path, "r", encoding="utf-8") as f:
                 loaded_missing_tracks = json.load(f)
             all_missing_tracks.extend(loaded_missing_tracks)
 
         all_missing_tracks.extend(parsed_missing_tracks)
 
-        with open(save_missing_path, "w") as f:
+        with open(save_missing_path, "w", encoding="utf-8") as f:
             json.dump(all_missing_tracks, f)

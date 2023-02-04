@@ -29,6 +29,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "-f",
+        "--rewrite",
         action="store_true",
         help="If playlist with tidal_playlist_name exists, delete it and rewrite it",
     )
@@ -89,20 +90,13 @@ if __name__ == "__main__":
         spotify_playlist_name = p["name"]
         tidal_playlist_name = f"{prefix} {spotify_playlist_name}"
 
-        print(
-            f'\nTransferring spotify playlist "{spotify_playlist_name}" to tidal playlist "{tidal_playlist_name}"'
-        )
-        if args.f:
-            print(
-                f'-f argument is given, rewriting playlist "{tidal_playlist_name}" on tidal'
-            )
-
         transfer_playlist(
             spotify_playlist_name,
             tidal_playlist_name,
+            "s",
             spotify_client,
             tidal_client,
-            args.f,
+            args.rewrite,
             args.save_missing,
             save_missing_path,
         )

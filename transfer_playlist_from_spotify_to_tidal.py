@@ -24,12 +24,20 @@ TIDAL_EXPIRY_TIME: str = os.getenv("TIDAL_EXPIRY_TIME")
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("spotify_playlist_name")
-    parser.add_argument("tidal_playlist_name")
+    parser.add_argument("spotify_playlist_name", help="Spotify playlist name or url")
+    parser.add_argument(
+        "tidal_playlist_name",
+        help="Tidal playlist name, if empty, will create the playlist with --prefix ",
+    )
     parser.add_argument(
         "-f",
+        "--rewrite",
         action="store_true",
         help="If playlist with tidal_playlist_name exists, delete it and rewrite it",
+    )
+    parser.add_argument(
+        "--prefix",
+        help="Prefix to use with tidal playlist names, will use spotify user name if empty",
     )
     return parser.parse_args()
 
@@ -57,18 +65,11 @@ if __name__ == "__main__":
     print("Connecting to Tidal account...")
     tidal_client.login()
 
-    print(
-        f'Transferring spotify playlist "{args.spotify_playlist_name}" to tidal playlist "{args.tidal_playlist_name}"'
-    )
-    if args.f:
-        print(
-            f'-f argument is given, rewriting playlist "{args.tidal_playlist_name}" on tidal'
-        )
-
     transfer_playlist(
         args.spotify_playlist_name,
         args.tidal_playlist_name,
+        args.prefix,
         spotify_client,
         tidal_client,
-        args.f
+        args.rewrite,
     )

@@ -41,17 +41,20 @@ class SpotifyClient:
         return all_items
 
     def load_playlist(self, playlist_name: str) -> Dict | None:
+        # example name https://open.spotify.com/playlist/56lYk4eP6xHikt5ggnaVpb?si=b716f6aa2fc24021
+
+        if playlist_name.startswith("https://open.spotify.com/playlist/"):
+            return self.sp.playlist(playlist_name)
+
         for playlist in self.load_all_user_playlists():
             if playlist["name"] == playlist_name:
                 return playlist
+
         return None
 
-    def load_playlist_tracks(self, playlist_name: str):
-        playlist_info = self.load_playlist(playlist_name)
-        playlist_id = playlist_info["id"]
-
+    def load_playlist_tracks(self, playlist: Dict):
         all_items = []
-        tracks = self.sp.playlist_tracks(playlist_id)
+        tracks = self.sp.playlist_tracks(playlist["id"])
         while tracks:
             all_items.extend(tracks["items"])
             if tracks["next"]:
