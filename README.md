@@ -13,10 +13,10 @@ SPOTIFY_SCOPE="user-library-read"
 The first run will save tidal login details in `.env` file
 
 4. Transfer one playlist:
-  - Run `python transfer_playlist_from_spotify_to_tidal.py "spotify playlist name" "tidal playlist name"`. 
+  - Run `python transfer_playlist_from_spotify_to_tidal.py -f "spotify playlist name" "tidal playlist name"`. 
   - Use `-f` option to rewrite playlist (deletes all playlists with this name)
 5. Transfer all user playlists
-  - Run `python transfer_all_playlists_from_spotify_to_tidal.py`
+  - Run `python transfer_all_playlists_from_spotify_to_tidal.py -f`
   - Use `-f` option to rewrite playlist (deletes all playlists with this name)
   - Use `--prefix` to create custom name, otherwise it'll use displayed spotify user name
   - Use `--save_missing` to save missing tracks in `logs/` as json
