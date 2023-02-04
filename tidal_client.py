@@ -119,7 +119,7 @@ class TidalClient:
         if tidal_id:
             return tidal_id
 
-        # search by album
+        # search by album without track name
         tidal_id = self._name_album_date_search_query_result(
             track["album"], track["album_release_date"], track["isrc"]
         )
