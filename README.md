@@ -15,7 +15,8 @@ SPOTIFY_SCOPE="user-library-read"
 6. You need to have a paid tidal account
 
 ## Scenarios
-### Transfer one playlist:
+### spotify to tidal
+#### Transfer one playlist:
 - Run `python transfer_playlist_from_spotify_to_tidal.py -f "spotify playlist name" "tidal playlist name"`.
   - Use `-f` option to rewrite tidal playlist (deletes all playlists with this name)
   - Use `--prefix` to create custom playlist prefix (if "tidal playlist name" is empty), otherwise the script will use displayed spotify user name
@@ -23,16 +24,18 @@ SPOTIFY_SCOPE="user-library-read"
   - Use `--save_missing_path` to specify where the tracks will be saved. If empty, the default path will be used
   - Pass `tidal playlist name` as an empty string `""` to create playlist name from spotify username (or `prefix` if it exists) and spotify playlist name
 
-### Transfer all logged user playlists
+#### Transfer all logged user playlists
 - Run `python transfer_all_user_playlists_from_spotify_to_tidal.py -f`
   - All arguments are the same
-### Transfer playlists from a list
+  
+#### Transfer playlists from a list
 - Create a list of playlists, example list is in `playlists.txt` 
 - It should contain spotify playlist links (for any playlist) or playlist names (but only for playlists created by the logged user)
 - Run `bash transfer_playlists_list.sh playlists.txt`
 - Missing tracks will be automatically saved
 
-### Download tidal playlists
+### Download 
+#### tidal playlists
 - Run `tidal-dl` to setup the downloader
 - Run `bash download_tidal_playlists.sh %prefix%`
 - `prefix` is the starting prefix for tidal playlists you want to download
