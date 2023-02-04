@@ -34,6 +34,11 @@ def parse_args():
         type=str,
         help="Prefix to use with tidal playlist names, will use spotify user name if empty",
     )
+    parser.add_argument(
+        "--save_missing",
+        action="store_true",
+        help="Save missing tracks in logs/",
+    )
     return parser.parse_args()
 
 
@@ -73,7 +78,7 @@ if __name__ == "__main__":
         tidal_playlist_name = f"{prefix} {spotify_playlist_name}"
 
         print(
-            f'Transferring spotify playlist "{spotify_playlist_name}" to tidal playlist "{tidal_playlist_name}"'
+            f'\nTransferring spotify playlist "{spotify_playlist_name}" to tidal playlist "{tidal_playlist_name}"'
         )
         if args.f:
             print(
@@ -86,4 +91,5 @@ if __name__ == "__main__":
             spotify_client,
             tidal_client,
             args.f,
+            args.save_missing,
         )

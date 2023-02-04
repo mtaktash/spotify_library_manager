@@ -70,5 +70,5 @@ if __name__ == "__main__":
         args.tidal_playlist_name,
         spotify_client,
         tidal_client,
-        args.f,
+        args.f
     )

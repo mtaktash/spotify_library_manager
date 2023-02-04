@@ -53,13 +53,12 @@ class TidalClient:
         playlist = self.session.user.create_playlist(playlist_name, playlist_desc)
         playlist.add(tids)
 
-    def get_search_query_result(self, text: str) -> List[tidalapi.Track]:
-        res = self.session.search(text.lower())
-        return res["tracks"]
-
-    def process_search_query_result(
-        self, result: List[tidalapi.Track], isrc: str, artist: str
+    def _artist_name_search_query_result(
+        self, artist: str, name: str, isrc: str
     ) -> int | None:
+        result = self.session.search(f"{artist} {name}")["tracks"]
+        result.extend(self.session.search(f"{name} {artist}")["tracks"])
+
         for t in result:
             if t.isrc == isrc:
                 tidal_id = t.id
@@ -78,17 +77,31 @@ class TidalClient:
 
         return None
 
-    def search_track(self, track: Dict) -> str | None:
-        found_tracks = []
-        found_tracks.extend(
-            self.get_search_query_result(f"{track['artist']} {track['name']}")
-        )
-        found_tracks.extend(
-            self.get_search_query_result(f"{track['name']} {track['artist']}")
-        )
+    def _artist_all_tracks_search_query_result(
+        self, artist: str, name: str, isrc: str
+    ) -> int | None:
+        result = self.session.search(f"{artist}")["artists"]
 
-        tidal_id = self.process_search_query_result(
-            found_tracks, track["isrc"], track["artist"]
+        for item in result:
+            print(item)
+            print(item.name)
+
+        # search in the query results
+        possible_artists = list(
+            filter(
+                lambda s: artist in s.name,
+                result,
+            )
+        )
+        print(possible_artists)
+        return None
+
+    def search_track(self, track: Dict) -> str | None:
+        # search artist name first
+        tidal_id = self._artist_name_search_query_result(
+            track["artist"],
+            track["name"],
+            track["isrc"],
         )
         if tidal_id:
             return tidal_id
@@ -96,12 +109,17 @@ class TidalClient:
         # for cases when tracks are transliterated (currently only Cyrillics to Latin)
         artist_ru = translit(track["artist"], "ru")
 
-        found_tracks = []
-        found_tracks.extend(
-            self.get_search_query_result(f"{artist_ru} {track['name']}")
+        tidal_id = self._artist_name_search_query_result(
+            artist_ru,
+            track["name"],
+            track["isrc"],
         )
-        found_tracks.extend(
-            self.get_search_query_result(f"{track['name']} {artist_ru}")
-        )
+        if tidal_id:
+            return tidal_id
 
-        return self.process_search_query_result(found_tracks, track["isrc"], artist_ru)
+        # # search artist album tracks
+        # tidal_id = self._artist_all_tracks_search_query_result(
+        #     track["artist"],
+        #     track["name"],
+        #     track["isrc"],
+        # )
