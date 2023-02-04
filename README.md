@@ -10,7 +10,7 @@ SPOTIFY_REDIRECT_URI=%redirect_uri%
 SPOTIFY_SCOPE="user-library-read"
 ```
 
-4. `python main.py "spotify playlist name" "tidal playlist name"`
+4. `python transfer_playlist_from_spotify_to_tidal.py "spotify playlist name" "tidal playlist name"`. Use `-f` option to rewrite playlist (deletes all playlists with this name)
 5. The first run will save tidal login details in `.env` file
 
 
