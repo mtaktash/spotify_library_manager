@@ -1,5 +1,6 @@
 # spotify_library_manager
 
+## Setup
 1. `pip install -r requirements.txt`
 2. Get `client_id` and `client_secret` by creating an app on https://developer.spotify.com/. Set `redirect_uri` to something like `http://127.0.0.1:9090`
 3. Create `.env` file with spotify details. The first run will also save tidal login details in `.env` file
@@ -10,7 +11,7 @@ SPOTIFY_REDIRECT_URI=%redirect_uri%
 SPOTIFY_SCOPE="user-library-read"
 ```
 
-Scenarios
+## Scenarios
 1. Transfer one playlist:
   - Run `python transfer_playlist_from_spotify_to_tidal.py -f "spotify playlist name" "tidal playlist name"`. 
   - Use `-f` option to rewrite playlist (deletes all playlists with this name)
