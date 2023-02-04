@@ -1,7 +1,7 @@
 # spotify_library_manager
 
 1. `pip install -r requirements.txt`
-2. Get `client_id` and `client_secret` by creating an app on https://developer.spotify.com/. Set redirect uri to something like http://127.0.0.1:9090
+2. Get `client_id` and `client_secret` by creating an app on https://developer.spotify.com/. Set redirect uri to something like `http://127.0.0.1:9090`
 3. Create `.env` file with 
 ```
 SPOTIFY_CLIENT_ID=%client_id% 
