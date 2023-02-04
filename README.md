@@ -22,7 +22,7 @@ SPOTIFY_SCOPE="user-library-read"
   - Pass `tidal playlist name` as an empty string `""` to create playlist name from spotify username (or `prefix` if it exists) and spotify playlist name
 
 ### Transfer all logged user playlists
-- Run `python transfer_all_playlists_from_spotify_to_tidal.py -f`
+- Run `python transfer_all_user_playlists_from_spotify_to_tidal.py -f`
   - All arguments are the same
 ### Transfer playlists from a list
 - Create a list of playlists, example list is in `playlists.txt` 
