@@ -24,7 +24,7 @@ SPOTIFY_SCOPE="user-library-read"
   - All arguments are the same
 ### Transfer playlists from a list
 - Create a list of playlists, example list is in `playlists.txt` 
-- It should contain spotify playlist links or playlist names (but only for playlists created by the logged user)
+- It should contain spotify playlist links (for any playlist) or playlist names (but only for playlists created by the logged user)
 - Run `bash transfer_playlists_list.sh playlists.txt`
 - Missing tracks will be automatically saved
 
