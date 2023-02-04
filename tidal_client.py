@@ -1,5 +1,6 @@
 from typing import Dict, List
 
+import dateutil
 import tidalapi
 from dotenv import find_dotenv, load_dotenv, set_key
 from transliterate import translit
@@ -65,15 +66,34 @@ class TidalClient:
                 return tidal_id
 
         # search in the query results
-        possible_ids = list(
+        possible_tracks = list(
             filter(
                 lambda s: artist in s.artist.name,
                 result,
             )
         )
-        if possible_ids:
-            tidal_id = possible_ids[0].id
+        if possible_tracks:
+            tidal_id = possible_tracks[0].id
             return tidal_id
+
+        return None
+
+    def _name_album_date_search_query_result(
+        self, album: str, release_date: str, isrc: str
+    ) -> int | None:
+        release_date = dateutil.parser.parse(release_date)
+
+        result = self.session.search(album)["albums"]
+
+        possible_tracks = list()
+        for album in result:
+            if album.release_date.year == release_date.year:
+                possible_tracks.extend(album.tracks())
+
+        for t in possible_tracks:
+            if t.isrc == isrc:
+                tidal_id = t.id
+                return tidal_id
 
         return None
 
@@ -87,15 +107,6 @@ class TidalClient:
         if tidal_id:
             return tidal_id
 
-        # for cases when there's a longer spotify name (like - Original Mix)
-        tidal_id = self._artist_name_search_query_result(
-            track["artist"],
-            track["name"].split("-")[0],
-            track["isrc"],
-        )
-        if tidal_id:
-            return tidal_id
-
         # for cases when tracks are transliterated (currently only Cyrillics to Latin)
         artist_ru = translit(track["artist"], "ru")
 
@@ -104,14 +115,13 @@ class TidalClient:
             track["name"],
             track["isrc"],
         )
+
         if tidal_id:
             return tidal_id
 
-        # for cases when artist name is missing whitespaces (like A.R. Kane and A. R. Kane.)
-        tidal_id = self._artist_name_search_query_result(
-            track["artist"].replace(".", ". ").replace("  ", " "),
-            track["name"],
-            track["isrc"],
+        # search by album
+        tidal_id = self._name_album_date_search_query_result(
+            track["album"], track["album_release_date"], track["isrc"]
         )
-        if tidal_id:
-            return tidal_id
+
+        return tidal_id
