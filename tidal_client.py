@@ -96,6 +96,8 @@ class TidalClient:
             if album.year == release_date.year:
                 possible_tracks.extend(album.tracks())
 
+        # album artist and name might differ from spotify one
+        # thus try a search by id only
         for t in possible_tracks:
             if t.isrc == isrc:
                 tidal_id = t.id
