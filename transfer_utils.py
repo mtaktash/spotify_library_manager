@@ -56,8 +56,7 @@ def transfer_playlist_to_tidal(
 
         if not res:
             print(f"Skipped track {parsed_track['name']} {parsed_track['artist']}")
-            if save_missing:
-                missing_tracks.append(track)
+            missing_tracks.append(track)
             continue
 
         tids.append(res)
