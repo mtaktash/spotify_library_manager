@@ -1,13 +1,12 @@
 import argparse
 import datetime
 import os
-from typing import List
 
 from dotenv import load_dotenv, find_dotenv
 
 from spotify_client import SpotifyClient
 from tidal_client import TidalClient
-from transfer_utils import transfer_playlist
+from transfer_utils import transfer_playlist_to_tidal
 
 load_dotenv(find_dotenv())
 
@@ -92,7 +91,7 @@ if __name__ == "__main__":
         spotify_playlist_name = p["name"]
         tidal_playlist_name = f"{prefix} {spotify_playlist_name}"
 
-        transfer_playlist(
+        transfer_playlist_to_tidal(
             spotify_playlist_name,
             tidal_playlist_name,
             "",

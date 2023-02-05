@@ -1,7 +1,8 @@
 spotipy
 tidalapi
-tqdm
+tidal-dl
+deezer-python
 python-dotenv
 python-dateutil
 transliterate
-tidal-dl
+tqdm

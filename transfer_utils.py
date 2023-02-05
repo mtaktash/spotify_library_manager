@@ -20,7 +20,7 @@ def parse_spotify_track(track: Dict):
     )
 
 
-def transfer_playlist(
+def transfer_playlist_to_tidal(
     spotify_playlist_name: str,
     tidal_playlist_name: str,
     prefix: str,
