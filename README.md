@@ -11,8 +11,8 @@ SPOTIFY_CLIENT_SECRET=%client_secret%
 SPOTIFY_REDIRECT_URI=%redirect_uri%
 SPOTIFY_SCOPE="user-library-read"
 ```
-5. The first run **ask to login to tidal** and save tidal login details in `.env` file
-6. You need to have a paid tidal account
+6. The first run **will ask to login to spotify and tidal** and save spotify login details in `.cache` (spotipy implementation) and tidal login details in `.env` file
+7. You need to have a paid tidal account
 
 ## Scenarios
 ### spotify to tidal
