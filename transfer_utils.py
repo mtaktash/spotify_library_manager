@@ -33,10 +33,12 @@ def transfer_playlist_to_tidal(
     spotify_playlist = spotify_client.load_playlist(spotify_playlist_name)
     tracks: List[Dict] = spotify_client.load_playlist_tracks(spotify_playlist)
 
-    if not prefix:
-        prefix = spotify_client.get_user_name()
+    if not tidal_playlist_name:
+        if not prefix:
+            prefix = spotify_client.get_user_name()
 
-    tidal_playlist_name = f"{prefix} {spotify_playlist['name']}"
+        tidal_playlist_name = f"{prefix} {spotify_playlist['name']}"
+
     print(
         f'\nTransferring spotify playlist "{spotify_playlist["name"]}" to tidal playlist "{tidal_playlist_name}"'
     )
