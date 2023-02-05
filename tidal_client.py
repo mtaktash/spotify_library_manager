@@ -117,13 +117,29 @@ class TidalClient:
 
         # for cases when tracks are transliterated (currently only Cyrillics to Latin)
         artist_ru = translit(track["artist"], "ru")
-
         tidal_id = self._artist_name_search_query_result(
             artist_ru,
             track["name"],
             track["isrc"],
         )
 
+        if tidal_id:
+            return tidal_id
+
+        name_ru = translit(track["name"], "ru")
+        tidal_id = self._artist_name_search_query_result(
+            track["artist"],
+            name_ru,
+            track["isrc"],
+        )
+        if tidal_id:
+            return tidal_id
+
+        tidal_id = self._artist_name_search_query_result(
+            artist_ru,
+            name_ru,
+            track["isrc"],
+        )
         if tidal_id:
             return tidal_id
 
