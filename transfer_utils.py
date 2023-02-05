@@ -72,6 +72,8 @@ def transfer_playlist_to_tidal(
     playlist_desc = f"Created from spotify playlist {spotify_playlist['external_urls']['spotify']} on {datetime.datetime.now()}"
     tidal_client.create_playlist(tidal_playlist_name, playlist_desc, tids)
 
+    print(f"Total {len(tracks)} tracks, {len(missing_tracks)} missing")
+
     if save_missing:
         print(f"Saving missing tracks to {save_missing_path}")
         parsed_missing_tracks = [parse_spotify_track(track) for track in missing_tracks]

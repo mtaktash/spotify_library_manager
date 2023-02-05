@@ -24,6 +24,8 @@ class TidalClient:
                 self._refresh_token,
                 self._expiry_time,
             )
+            assert self.session.check_login()
+
         except Exception:
             self.session.login_oauth_simple()
 
