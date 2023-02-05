@@ -82,7 +82,6 @@ if __name__ == "__main__":
             save_missing_path = os.path.join(
                 LOGS_DIR, f"missing_{datetime.datetime.now()}.json"
             )
-        print(f"Saving missing tracks to {save_missing_path}")
 
     transfer_playlist_to_tidal(
         args.spotify_playlist_name,

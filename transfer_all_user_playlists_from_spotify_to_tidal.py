@@ -83,7 +83,6 @@ if __name__ == "__main__":
             save_missing_path = os.path.join(
                 LOGS_DIR, f"missing_{datetime.datetime.now()}.json"
             )
-        print(f"Saving missing tracks to {save_missing_path}")
 
     all_spotify_playlists = spotify_client.load_all_user_playlists()
     print(f"Total playlists {len(all_spotify_playlists)}")
