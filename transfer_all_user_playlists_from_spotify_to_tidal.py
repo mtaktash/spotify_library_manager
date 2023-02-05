@@ -86,6 +86,7 @@ if __name__ == "__main__":
         print(f"Saving missing tracks to {save_missing_path}")
 
     all_spotify_playlists = spotify_client.load_all_user_playlists()
+    print(f"Total playlists {len(all_spotify_playlists)}")
 
     for p in all_spotify_playlists:
         spotify_playlist_name = p["name"]
