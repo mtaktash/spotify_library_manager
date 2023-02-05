@@ -2,7 +2,8 @@ import argparse
 import datetime
 import os
 
-from dotenv import load_dotenv, find_dotenv
+from dotenv import find_dotenv, load_dotenv
+from tqdm import tqdm
 
 from spotify_client import SpotifyClient
 from tidal_client import TidalClient
@@ -87,7 +88,7 @@ if __name__ == "__main__":
     all_spotify_playlists = spotify_client.load_all_user_playlists()
     print(f"Total playlists {len(all_spotify_playlists)}")
 
-    for p in all_spotify_playlists:
+    for p in tqdm(all_spotify_playlists, "Playlists transferred"):
         spotify_playlist_name = p["name"]
         tidal_playlist_name = f"{prefix} {spotify_playlist_name}"
 
