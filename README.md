@@ -17,7 +17,8 @@ SPOTIFY_SCOPE="user-library-read"
 ## Scenarios
 ### spotify to tidal
 #### transfer one playlist
-- Run `python transfer_playlist_from_spotify_to_tidal.py -f "spotify playlist name" "tidal playlist name"`.
+- Run `python transfer_playlist_from_spotify_to_tidal.py -f "spotify playlist name" "tidal playlist name"`
+  - `"spotify playlist name` should contain spotify playlist link (for any playlist) or actual playlist name (but only for playlists created by the logged user)
   - Use `-f` option to rewrite tidal playlist (deletes all playlists with this name)
   - Use `--prefix` to create custom playlist prefix (if "tidal playlist name" is empty), otherwise the script will use displayed spotify user name
   - Use `--save_missing` to save missing tracks as a json
