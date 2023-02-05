@@ -54,8 +54,10 @@ class TidalClient:
             playlist.delete()
 
     def create_playlist(self, playlist_name: str, playlist_desc: str, tids: List[str]):
+        query_size = 300
         playlist = self.session.user.create_playlist(playlist_name, playlist_desc)
-        playlist.add(tids)
+        for i in range(0, len(tids), query_size):
+            playlist.add(tids[i : i + query_size])
 
     def _artist_name_search_query_result(
         self, artist: str, name: str, isrc: str
