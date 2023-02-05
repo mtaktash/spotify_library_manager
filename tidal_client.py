@@ -89,10 +89,11 @@ class TidalClient:
         release_date = dateutil.parser.parse(release_date)
 
         result = self.session.search(album)["albums"]
-
         possible_tracks = list()
         for album in result:
-            if album.release_date.year == release_date.year:
+            # get the release date if it’s available
+            # otherwise get the day it was released on TIDAL to not raise an error
+            if album.year == release_date.year:
                 possible_tracks.extend(album.tracks())
 
         for t in possible_tracks:
