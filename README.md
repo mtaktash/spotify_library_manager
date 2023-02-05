@@ -3,7 +3,7 @@
 ## Setup
 1. `pip install -r requirements.txt`
 2. Get `client_id` and `client_secret` by creating an app on https://developer.spotify.com/dashboard
-3. Set `redirect_uri` in app settings to something like `http://127.0.0.1:9090`
+3. Set `redirect_uri` in **app settings** (go to an app in https://developer.spotify.com/dashboard -> edit settings -> redirect uri) to something like `http://127.0.0.1:9090`
 4. Create `.env` file with spotify details. 
 ```
 SPOTIFY_CLIENT_ID=%client_id% 
