@@ -49,7 +49,6 @@ class SpotifyClient:
         for playlist in self.load_all_user_playlists():
             if playlist["name"] == playlist_name:
                 return playlist
-
         return None
 
     def load_playlist_tracks(self, playlist: Dict):
