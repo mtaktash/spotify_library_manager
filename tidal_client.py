@@ -143,6 +143,34 @@ class TidalClient:
         if tidal_id:
             return tidal_id
 
+        # reverse transliteration
+        artist_en = translit(track["artist"], "ru", reversed=True)
+        tidal_id = self._artist_name_search_query_result(
+            artist_en,
+            track["name"],
+            track["isrc"],
+        )
+
+        if tidal_id:
+            return tidal_id
+
+        name_en = translit(track["name"], "ru", reversed=True)
+        tidal_id = self._artist_name_search_query_result(
+            track["artist"],
+            name_en,
+            track["isrc"],
+        )
+        if tidal_id:
+            return tidal_id
+
+        tidal_id = self._artist_name_search_query_result(
+            artist_en,
+            name_en,
+            track["isrc"],
+        )
+        if tidal_id:
+            return tidal_id
+
         # search by album without track name
         tidal_id = self._name_album_date_search_query_result(
             track["album"], track["album_release_date"], track["isrc"]
